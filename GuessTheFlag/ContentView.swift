@@ -20,7 +20,7 @@ struct ContentView: View {
 	@State private var scoreTitle = ""
 	@State private var userScore = 0
 	@State private var round = 0
-	@State private var choosenFlag = 0
+	@State private var choosenFlag: Int? = nil
 	
 	// MARK: - UI
 	
@@ -54,6 +54,8 @@ struct ContentView: View {
 							FlagImage(title: contries[number])
 						}
 						.rotation3DEffect(.degrees(buttonTapped[number] ? 180 : 0), axis: (x: 0, y: 1, z: 0))
+						.opacity(choosenFlag == nil || choosenFlag == number ? 1.0 : 0.25)
+						.scaleEffect(choosenFlag == nil || choosenFlag == number ? 1.0 : 0.25)
 					}
 				}
 				.frame(maxWidth: .infinity)
@@ -99,6 +101,7 @@ extension ContentView {
 			isShowingEndOfGame = true
 		} else {
 			round += 1
+			choosenFlag = number
 			buttonTapped[number].toggle()
 			if number == correctAnswer {
 				scoreTitle = "RIGHT!"
@@ -114,6 +117,8 @@ extension ContentView {
 	private func askQuestion() {
 		contries.shuffle()
 		correctAnswer = Int.random(in: 0...2)
+		buttonTapped = [false, false, false]
+		choosenFlag = nil
 	}
 	
 	private func reset() {

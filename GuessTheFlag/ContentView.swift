@@ -24,7 +24,7 @@ struct ContentView: View {
 	
 	var body: some View {
 		ZStack {
-			RadialGradient(stops: [.init(color: Color(red: 0, green: 0.2, blue: 0.45), location: 0.3), .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3)], center: .top, startRadius: 200, endRadius: 700)
+			RadialGradient(stops: [.init(color: Color(red: 0, green: 0.2, blue: 0.65), location: 0.4), .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3)], center: .top, startRadius: 200, endRadius: 700)
 			
 			VStack {
 				Spacer()
@@ -63,15 +63,15 @@ struct ContentView: View {
 				Button("Continue", action: askQuestion)
 			} message: {
 				if scoreTitle == "Wrong" {
-					Text("Wrong! That’s the flag of \(contries[correctAnswer])")
+					Text("That’s the flag of \(contries[correctAnswer])")
 				} else {
-					Text("Correct! Your score is: \(userScore)")
+					Text("You are awesome!")
 				}
 			}
-			.alert("Game is over", isPresented: $showingEndOfGame) {
+			.alert("THE END", isPresented: $showingEndOfGame) {
 				Button("Reset", action: reset)
 			} message: {
-				Text("Your score is: \(userScore)")
+				Text("Your score: \(userScore)")
 			}
 		}
 		.ignoresSafeArea()
@@ -85,10 +85,10 @@ struct ContentView: View {
 		} else {
 			count += 1
 			if number == correctAnswer {
-				scoreTitle = "Right"
+				scoreTitle = "RIGHT!"
 				userScore += 1
 			} else {
-				scoreTitle = "Wrong"
+				scoreTitle = "WRONG :("
 				userScore -= 1
 			}
 			showingScore = true

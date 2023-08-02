@@ -108,7 +108,6 @@ extension ContentView {
 				userScore += 1
 			} else {
 				scoreTitle = "WRONG :("
-				userScore -= 1
 			}
 			isShowingScore = true
 		}

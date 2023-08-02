@@ -12,29 +12,33 @@ struct ContentView: View {
 	
 	// MARK: - States
 	
-	@State private var showingEndOfGame = false
-	@State private var showingScore = false
-	@State private var scoreTitle = ""
-	@State private var userScore = 0
 	@State private var contries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
 	@State private var correctAnswer = Int.random(in: 0...2)
-	@State private var count = 0
+	@State private var isShowingEndOfGame = false
+	@State private var isShowingScore = false
+	@State private var scoreTitle = ""
+	@State private var userScore = 0
+	@State private var round = 0
 	
 	// MARK: - UI
 	
 	var body: some View {
 		ZStack {
-			RadialGradient(stops: [.init(color: Color(red: 0, green: 0.2, blue: 0.65), location: 0.4), .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3)], center: .top, startRadius: 200, endRadius: 700)
-			
+			RadialGradient(stops: [.init(color: Color(red: 0, green: 0.2, blue: 0.45), location: 0.4),
+								   .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.6)],
+						   center: .top, startRadius: 200, endRadius: 700)
 			VStack {
 				Spacer()
+				
 				Text("Guess the Flag")
 					.modifireBlueTitle()
+				
 				VStack (spacing: 15) {
 					VStack {
 						Text("Tap the flag of")
 							.foregroundStyle(.secondary)
 							.font(.subheadline.weight(.heavy))
+						
 						Text(contries[correctAnswer])
 							.font(.largeTitle.weight(.bold))
 					}
@@ -51,15 +55,19 @@ struct ContentView: View {
 				.padding(.vertical, 20)
 				.background(.regularMaterial)
 				.clipShape(RoundedRectangle(cornerRadius: 20))
+				
 				Spacer()
+				
 				Spacer()
+				
 				Text("Score: \(userScore)")
 					.foregroundColor(.white)
 					.font(.title.bold())
+				
 				Spacer()
 			}
 			.padding()
-			.alert(scoreTitle, isPresented: $showingScore) {
+			.alert(scoreTitle, isPresented: $isShowingScore) {
 				Button("Continue", action: askQuestion)
 			} message: {
 				if scoreTitle == "Wrong" {
@@ -68,22 +76,24 @@ struct ContentView: View {
 					Text("You are awesome!")
 				}
 			}
-			.alert("THE END", isPresented: $showingEndOfGame) {
-				Button("Reset", action: reset)
+			.alert("THE END", isPresented: $isShowingEndOfGame) {
+				Button("Try again!", action: reset)
 			} message: {
 				Text("Your score: \(userScore)")
 			}
 		}
 		.ignoresSafeArea()
 	}
-	
-	// MARK: - Private methods
-	
+}
+
+// MARK: - Private methods
+
+extension ContentView {
 	private func flagTapped(number: Int) {
-		if count == 2 {
-			showingEndOfGame = true
+		if round == 10 {
+			isShowingEndOfGame = true
 		} else {
-			count += 1
+			round += 1
 			if number == correctAnswer {
 				scoreTitle = "RIGHT!"
 				userScore += 1
@@ -91,7 +101,7 @@ struct ContentView: View {
 				scoreTitle = "WRONG :("
 				userScore -= 1
 			}
-			showingScore = true
+			isShowingScore = true
 		}
 	}
 	
@@ -101,7 +111,7 @@ struct ContentView: View {
 	}
 	
 	private func reset() {
-		count = 0
+		round = 0
 		userScore = 0
 		scoreTitle = ""
 	}

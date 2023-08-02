@@ -12,6 +12,7 @@ struct ContentView: View {
 	
 	// MARK: - States
 	
+	@State private var buttonTapped: [Bool] = [false, false, false]
 	@State private var contries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
 	@State private var correctAnswer = Int.random(in: 0...2)
 	@State private var isShowingEndOfGame = false
@@ -19,6 +20,7 @@ struct ContentView: View {
 	@State private var scoreTitle = ""
 	@State private var userScore = 0
 	@State private var round = 0
+	@State private var choosenFlag = 0
 	
 	// MARK: - UI
 	
@@ -45,10 +47,13 @@ struct ContentView: View {
 					
 					ForEach(0..<3) { number in
 						Button {
-							flagTapped(number: number)
+							withAnimation {
+								flagTapped(number: number)
+							}
 						} label: {
 							FlagImage(title: contries[number])
 						}
+						.rotation3DEffect(.degrees(buttonTapped[number] ? 180 : 0), axis: (x: 0, y: 1, z: 0))
 					}
 				}
 				.frame(maxWidth: .infinity)
@@ -94,6 +99,7 @@ extension ContentView {
 			isShowingEndOfGame = true
 		} else {
 			round += 1
+			buttonTapped[number].toggle()
 			if number == correctAnswer {
 				scoreTitle = "RIGHT!"
 				userScore += 1

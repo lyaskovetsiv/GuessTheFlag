@@ -7,32 +7,10 @@
 
 import SwiftUI
 
-struct FlagImage: View {
-	var title: String
-	
-	var body: some View {
-		Image(title)
-			.renderingMode(.original)
-			.clipShape(Capsule())
-			.shadow(radius: 5)
-	}
-}
-
-struct BlueTitle: ViewModifier {
-	func body(content: Content) -> some View {
-		content
-			.font(.largeTitle)
-			.foregroundColor(.blue)
-	}
-}
-
-extension View {
-	func modifireBlueTitle() -> some View {
-		modifier(BlueTitle())
-	}
-}
 
 struct ContentView: View {
+	
+	// MARK: - States
 	
 	@State private var showingEndOfGame = false
 	@State private var showingScore = false
@@ -40,12 +18,14 @@ struct ContentView: View {
 	@State private var userScore = 0
 	@State private var contries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
 	@State private var correctAnswer = Int.random(in: 0...2)
-	
 	@State private var count = 0
+	
+	// MARK: - UI
 	
 	var body: some View {
 		ZStack {
 			RadialGradient(stops: [.init(color: Color(red: 0, green: 0.2, blue: 0.45), location: 0.3), .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3)], center: .top, startRadius: 200, endRadius: 700)
+			
 			VStack {
 				Spacer()
 				Text("Guess the Flag")
@@ -93,10 +73,11 @@ struct ContentView: View {
 			} message: {
 				Text("Your score is: \(userScore)")
 			}
-
 		}
 		.ignoresSafeArea()
 	}
+	
+	// MARK: - Private methods
 	
 	private func flagTapped(number: Int) {
 		if count == 2 {
